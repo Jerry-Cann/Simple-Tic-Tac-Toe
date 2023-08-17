@@ -6,46 +6,23 @@ def draw_board(coordinates_line):
     print("---------")
 
 
-def x_move(coordinates):
+def make_move(player_symbol, coordinates):
     global order_tracker
+
     coordinates = coordinates.split()
     if coordinates[0].isnumeric() and coordinates[1].isnumeric():
         coordinates = [int(coordinates[0]), int(coordinates[1])]
         if coordinates[0] > 3 or coordinates[1] > 3:
             print("Coordinates should be from 1 to 3!")
-            x_move(input())
         elif board_state[(coordinates[1] - 1) + (coordinates[0] - 1) * 3] != "_":
             print("This cell is occupied! Choose another one!")
-            x_move(input())
         else:
-            board_state[(coordinates[1] - 1) + (coordinates[0] - 1) * 3] = "X"
+            board_state[(coordinates[1] - 1) + (coordinates[0] - 1) * 3] = player_symbol
             draw_board(board_state)
             order_tracker += 1
             gamestate_analyzer()
     else:
         print("You should enter numbers!")
-        x_move(input())
-
-
-def o_move(coordinates):
-    global order_tracker
-    coordinates = coordinates.split()
-    if coordinates[0].isnumeric() and coordinates[1].isnumeric():
-        coordinates = [int(coordinates[0]), int(coordinates[1])]
-        if coordinates[0] > 3 or coordinates[1] > 3:
-            print("Coordinates should be from 1 to 3!")
-            o_move(input())
-        elif board_state[(coordinates[1] - 1) + (coordinates[0] - 1) * 3] != "_":
-            print("This cell is occupied! Choose another one!")
-            o_move(input())
-        else:
-            board_state[(coordinates[1] - 1) + (coordinates[0] - 1) * 3] = "O"
-            draw_board(board_state)
-            order_tracker += 1
-            gamestate_analyzer()
-    else:
-        print("You should enter numbers!")
-        o_move(input())
 
 
 def gamestate_analyzer():
@@ -76,10 +53,7 @@ def gamestate_analyzer():
     elif o_wins:
         print("O wins")
     elif x_counter + o_counter < 9:
-        if order_tracker % 2 == 0:
-            x_move(input())
-        else:
-            o_move(input())
+        pass
     else:
         print("Draw")
 
@@ -87,4 +61,6 @@ def gamestate_analyzer():
 board_state = ["_", "_", "_", "_", "_", "_", "_", "_", "_"]
 order_tracker = 0
 draw_board(board_state)
-x_move(input())
+while order_tracker < 9:
+    player = "X" if order_tracker % 2 == 0 else "O"
+    make_move(player, input())
